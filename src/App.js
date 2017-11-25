@@ -10,9 +10,15 @@ class App extends Component {
 
     return (
       <div>
-        <h1>Abhisheks first React App - changes on branch</h1>
-        <Hello id=""></Hello>
+        <h1 align="center">WHAM!</h1>
+        <form>
+          <fieldset>
+            <legend>Your Address:  </legend>
+            <input id="locSearch" type="text" name="locSearch" placeholder="eg: New York" />
+            </fieldset>
+        </form>
       </div>
+
     );
   }
 }

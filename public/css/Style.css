@@ -1,0 +1,5 @@
+#locSearch{
+  width: 100%;
+  flex: auto;
+  flex-direction: column;
+}

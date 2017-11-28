@@ -22,6 +22,13 @@
   font-size: large;
 }
 
+#titleText {
+  display: none;
+  position: relative;
+  z-index: 10;
+}
+
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

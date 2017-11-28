@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
-    <!--
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
+  <!--
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    <link rel="stylesheet" href="/css/Style.css">
-    <!--
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+  <link rel="stylesheet" href="/css/Style.css">
+  <link rel="stylesheet" href="/css/SearchBar.css">
+  <link rel="stylesheet" href="/css/Navigation.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -20,21 +24,103 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>
+  <title>React App</title>
+</head>
+
+<body>
+  <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
-    <div id="root"></div>
-    <script>
-      function createAutocompleteForSearch(){
-        var searchInput = document.getElementById('locSearch');
-        var autoComplete = new google.maps.places.Autocomplete(searchInput);
+  <!-- <header className="wrapHelper" align="center">WHAM!</header> -->
+  <nav class="navbar navbar-fixed-left navbar-minimal animate" role="navigation">
+    <div class="navbar-toggler animate">
+      <span class="menu-icon"></span>
+    </div>
+    <ul class="navbar-menu animate">
+      <li>
+        <a id="addSearchBar" href="#addSearchBar" class="animate">
+      					<span class="desc animate"> Adding SearchBar </span>
+      					<i class="fa fa-plus" aria-hidden="true"></i>
+      				</a>
+      </li>
+      <li>
+        <a id="removeSearchBar" href="#removeSearchBar" class="animate">
+      					<span class="desc animate"> Removing SearchBar </span>
+      					<i class="fa fa-minus" aria-hidden="true"></i>
+      				</a>
+      </li>
+      <li>
+        <a id="currentLocation" href="#currentLocation" class="animate">
+      					<span class="desc animate"> Get Current Location </span>
+      					<i class="fa fa-location-arrow" aria-hidden="true"></i>
+      				</a>
+      </li>
+    </ul>
+  </nav>
+  <div id="root"></div>
+  <script>
+    function createAutocompleteForSearch() {
+      var searchInput = document.getElementById('locSearch');
+      var autoComplete = new google.maps.places.Autocomplete(searchInput);
+    }
+
+    function initMap() {
+      var geo = navigator.geolocation;
+      if ("geolocation" in navigator) {
+        /* geolocation is available */
+        geo.getCurrentPosition(function(position) {
+
+          var latitude = position.coords.latitude;
+          var longitude = position.coords.longitude;
+
+          drawMapWithMarker(latitude, longitude);
+
+        });
+      } else {
+        /* geolocation IS NOT available */
+        alert("Sorry, no position available.");
       }
-    </script>
-    <script after defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6d4K_l62cMab-KG1B23LyoUOHjTedKgU&libraries=places&callback=createAutocompleteForSearch"></script>
-    <!--
+
+      createAutocompleteForSearch();
+    }
+
+    function drawMapWithMarker(latitude, longitude){
+      var options = {
+        zoom: 8,
+        center: {
+          lat: latitude,
+          lng: longitude
+        }
+      }
+
+      var mapDiv = document.createElement("div");
+      mapDiv.id = 'mainMap';
+      document.body.appendChild(mapDiv);
+      var map = new google.maps.Map(document.getElementById('mainMap'), options);
+      marker = new google.maps.Marker({
+        position:{lat:latitude,lng:longitude},
+        map:map,
+        draggable: true,
+        animation: google.maps.Animation.DROP,
+      });
+      marker.addListener('click', toggleBounce);
+    }
+
+    function toggleBounce(){
+      if(marker.getAnimation() !== null){
+        marker.setAnimation(null);
+      }else{
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script after defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6d4K_l62cMab-KG1B23LyoUOHjTedKgU&libraries=places&callback=initMap&sensor=false"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/js/Script.js">
+
+  </script>
+  <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
 
@@ -44,5 +130,6 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  </body>
+</body>
+
 </html>
